@@ -473,7 +473,7 @@ record * make_record(int key, char * value) {
 	}
 	else {
 		new_record->key = key;
-		new_record->value = value;						// ???
+//		new_record->*value = value;						// ???
 	}
 	return new_record;
 }
