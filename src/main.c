@@ -5,9 +5,10 @@
 int main(int argc, char ** argv) {
 
 	char * input_file;
-	char * open_file;										// use as the name of the file to be opened;
+	char *str;								// use as the name of the file to be opened;
 	char new_file[100];
 	FILE * fp;
+	int file_d;
 	node * root;
 	int input, range2;
 	char instruction;
@@ -52,13 +53,15 @@ int main(int argc, char ** argv) {
 				fgets(new_file , sizeof(new_file), stdin);
 				new_file[strlen(new_file) - 1] = '\0';
 				//				scanf("%s", &open_file);
-				open_file = &new_file;
-				if (open(open_file, O_CREAT | O_RDWR | O_TRUNC, 755) == 1) {
+				*str = new_file;
+				if ((file_d=open(str, O_CREAT | O_RDWR | O_TRUNC, 755)) == 1) {
 					perror("Failure2  open input file.\n");
 					exit(EXIT_FAILURE);
 				}
+				if (close(file_d) == -1)
+					printf("close error");
 				else {
-					fp = fopen(open_file, "rw");
+					fp = fopen(str, "rw");
 					if (fp == NULL) {
 						perror("Failure2  open open_file\n");
 						exit(EXIT_FAILURE);
