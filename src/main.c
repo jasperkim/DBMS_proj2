@@ -6,7 +6,9 @@ int main(int argc, char ** argv) {
 
 	char * input_file;
 	char *str;								// use as the name of the file to be opened;
+	char *rec_str;
 	char new_file[100];
+	char record_value[120];
 	FILE * fp;
 	int file_d;
 	node * root;
@@ -87,7 +89,11 @@ int main(int argc, char ** argv) {
 			break;
 		case 'i':												// MODIFY the insert function record, int + string
 			scanf("%d", &input);
-			root = insert(root, input, input);
+			fgets(record_value, sizeof(record_value), stdin);
+			record_value[strlen(record_value) - 1] = '\0';
+			//				scanf("%s", &open_file);
+			*rec_str = record_value;
+			root = insert(root, input, rec_str);
 			print_tree(root);
 			break;
 		case 'f':
