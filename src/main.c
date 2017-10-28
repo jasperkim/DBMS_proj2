@@ -5,7 +5,8 @@
 int main(int argc, char ** argv) {
 
 	char * input_file;
-	char open_file[100];										// use as the name of the file to be opened;
+	char * open_file;										// use as the name of the file to be opened;
+	char new_file[100];
 	FILE * fp;
 	node * root;
 	int input, range2;
@@ -42,14 +43,16 @@ int main(int argc, char ** argv) {
 		print_tree(root);										// read the tree and operate insertion, then print out the tree.
 	}
 
-/*	if (argc <= 1) {											// if the file name is not inserted, we should make new file
+
+	if (argc <= 1) {											// if the file name is not inserted, we should make new file
 		printf("> ");
 		for (;;) {
 			scanf("%c", &instruction);
 			if (instruction == 'o') {
-				fgets(open_file, sizeof(open_file), stdin);
-				open_file[strlen(open_file) - 1] = '\0';
+				fgets(new_file , sizeof(new_file), stdin);
+				new_file[strlen(new_file) - 1] = '\0';
 				//				scanf("%s", &open_file);
+				open_file = &new_file;
 				if (open(open_file, O_CREAT | O_RDWR | O_TRUNC, 755) == 1) {
 					perror("Failure2  open input file.\n");
 					exit(EXIT_FAILURE);
@@ -69,7 +72,7 @@ int main(int argc, char ** argv) {
 			}
 		}
 	}
-*/
+
 
 	printf("> ");												// this part is operated after the file is opened
 	while (scanf("%c", &instruction) != EOF) {
