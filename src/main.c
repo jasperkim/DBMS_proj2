@@ -15,6 +15,7 @@ int main(int argc, char ** argv) {
 	int input, range2;
 	char instruction;
 	char license_part;
+	
 
 	root = NULL;												// ???
 	verbose_output = false;										// ???
@@ -47,29 +48,19 @@ int main(int argc, char ** argv) {
 	}
 
 
-	if (argc <= 1) {											// if the file name is not inserted, we should make new file
+	if (!(argc > 2)) {											// if the file name is not inserted, we should make new file
 		printf("> ");
 		for (;;) {
-			scanf("%c", &instruction);
+			scanf("%c ", &instruction);
 			if (instruction == 'o') {
 				fgets(new_file , sizeof(new_file), stdin);
 				new_file[strlen(new_file) - 1] = '\0';
-				//				scanf("%s", &open_file);
-				*str = new_file;
-				if ((file_d=open(str, O_CREAT | O_RDWR | O_TRUNC, 755)) == 1) {
+				str = new_file;
+				if ((file_d=open(str, O_CREAT | O_RDWR | O_TRUNC, 755)) == -1) {
 					perror("Failure2  open input file.\n");
 					exit(EXIT_FAILURE);
 				}
-				if (close(file_d) == -1)
-					printf("close error");
-				else {
-					fp = fopen(str, "rw");
-					if (fp == NULL) {
-						perror("Failure2  open open_file\n");
-						exit(EXIT_FAILURE);
-					}
-					break;
-				}
+				break;
 			}
 			else {
 				usage_4();
@@ -77,6 +68,7 @@ int main(int argc, char ** argv) {
 			}
 		}
 	}
+
 
 
 	printf("> ");												// this part is operated after the file is opened
