@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <string.h>
+#include <sys/types.h>
 #ifdef WINDOWS
 #define bool char
 #define false 0
@@ -48,6 +49,10 @@ typedef struct record {				// MODIFY for the record, include the char string[120
 	char value[120];								// set the value 120btye by char value[120];
 } record;
 
+typedef struct internal_record {
+	long int key;
+	long unsigned int offset;
+} internal_record;
 /* Type representing a node in the B+ tree.
 * This type is general enough to serve for both
 * the leaf and the internal node.
@@ -84,6 +89,50 @@ typedef struct node {
 	int num_keys;
 	struct node * next; // Used for queue.
 } node;
+
+/* Type representing the page
+*
+*/
+typedef struct header_page {
+	// requires freepage offset, rootpage offset, number of pages, rest are reserved
+	long unsigned int free_page_offset;		// 8bytes
+	long unsigned int root_page_offset;		// 8btyes
+	long unsigned int number_of_pages;		// 8btyes
+	char reserved[4096];					// 4072bytes
+	
+} header_page;
+typedef struct free_page {
+	// requires free page offset, rest are reserved
+	long unsigned int next_free_page_offset;	// 8bytes
+	char reserved[4088];						// 4088bytes
+} free_page;
+
+typedef struct leaf_page{
+	// requires page header, and 31 records
+	// page header includes parent_page_offset, is_leaf, number_of_keys, right_page_offset;
+	struct leaf_page_header *pager_header;
+	struct record *record[31];
+} leaf_page;
+
+typedef struct internal_page {
+	struct internal_page_header *page_header;
+	struct internal_record *internal_record[248];
+} internal_page;
+typedef struct leaf_page_header {
+	long unsigned int parent_page_offset;
+	int is_leaf;							// is 1 for leaf node
+	int num_of_keys;
+	char reserved[104];
+	long unsigned int right_sibling_page_offset;
+} page_header;
+typedef struct internal_page_header {
+	long unsigned int parent_page_offset;
+	int is_leaf;							// is 0 for internal node
+	int num_of_keys;
+	char reserved[104];
+	long unsigned int right_sibling_page_offset;
+} page_header;
+
 
 // GLOBALS.
 
@@ -123,6 +172,7 @@ void print_license(int licence_part);
 void usage_1(void);
 void usage_2(void);
 void usage_3(void);
+void usage_4(void);
 void enqueue(node * new_node);
 node * dequeue(void);
 int height(node * root);
